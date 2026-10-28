@@ -53,6 +53,7 @@ export function createGateway({ ctx, cwd, statePath, pollMs = 250, timeoutMs = 6
   }
 
   async function prompt(key, text) {
+    if (!ctx.get('sessions')?.get) throw new Error('拿不到 sessions 服务，没法读会话进度')
     const sessionId = await ensure(key)
     const before = events(sessionId)?.at(-1)?.seq ?? 0
     const sc = ctx.get('sessionController')

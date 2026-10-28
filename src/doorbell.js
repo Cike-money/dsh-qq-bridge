@@ -50,6 +50,7 @@ export function createDoorbell({ port, token, prompt, forget, log = () => {} }) 
       return json(500, { ok: false, error: err?.message ?? String(err) })
     }
   })
+  server.on('error', (err) => log('doorbell 起不来（端口可能被占用），这次先不开', err?.message))
   server.listen(port, '127.0.0.1', () => log('doorbell listening on', port))
   return { close: () => server.close() }
 }

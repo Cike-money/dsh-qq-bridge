@@ -79,5 +79,5 @@ test('等不到 turn/end 就超时报错，不装没事', async () => {
 test('没有 sessionController 时报明确的错', async () => {
   const ctx = { get: () => undefined }
   const gw = createGateway({ ctx, cwd: 'C:\\tmp', statePath: join(mkdtempSync(join(tmpdir(), 'gw-')), 's.json') })
-  await assert.rejects(() => gw.prompt('private:5', 'hi'), /sessionController/)
+  await assert.rejects(() => gw.prompt('private:5', 'hi'), /sessions 服务|sessionController/)
 })

@@ -17,6 +17,9 @@ export { Config }
  */
 export function apply(ctx, rawConfig) {
   const config = Config(rawConfig ?? {})
+  // 地址留空就按 NapCat 默认端口补上，保证大多数人装完能直接连
+  if (!config.napcatHttp) config.napcatHttp = 'http://127.0.0.1:3000'
+  if (!config.napcatWs) config.napcatWs = 'ws://127.0.0.1:3001'
   const home = resolveHome(ctx)
   const logDir = config.logDir || home
   const log = createLog(logDir)
@@ -43,7 +46,7 @@ export function apply(ctx, rawConfig) {
   if (config.doorbellEnabled === true) {
     const token = config.doorbellToken || randomBytes(12).toString('hex')
     doorbell = createDoorbell({
-      port: Number(config.doorbellPort ?? 8643),
+      port: Number(config.doorbellPort) > 0 ? Number(config.doorbellPort) : 20000 + Math.floor(Math.random() * 10000),
       token,
       prompt: (key, text) => gateway.prompt(key, text),
       forget: async (key) => gateway.forget(key),
@@ -54,7 +57,7 @@ export function apply(ctx, rawConfig) {
 
   const hints = []
   if (!Number(config.ownerQQ)) hints.push('ownerQQ 没填，私聊一律不回')
-  if (!config.napcatToken) hints.push('napcatToken 空着，NapCat 开了鉴权会连不上')
+  if (!config.napcatToken) hints.push('napcatToken 空着：NapCat 没设口令就不用管，设了鉴权才需要填')
   if (!config.workspaceCwd) hints.push('workspaceCwd 没填，QQ 会话用 DSH 当前目录')
   if (hints.length) log('配置提醒：', hints.join('；'))
 

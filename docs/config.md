@@ -25,9 +25,9 @@
 
 | 字段 | 默认 | 说明 |
 | --- | --- | --- |
-| `napcatHttp` | `http://127.0.0.1:3000` | NapCat 的 HTTP 接口 |
-| `napcatWs` | `ws://127.0.0.1:3001` | NapCat 的 WebSocket |
-| `napcatToken` | 空 | NapCat 配置里的 token，HTTP 和 WS 都要对 |
+| `napcatHttp` | 空 | NapCat 的 HTTP 接口，默认 127.0.0.1:3000 |
+| `napcatWs` | 空 | NapCat 的 WebSocket，默认 127.0.0.1:3001 |
+| `napcatToken` | 空 | 可选：NapCat 设了口令才填，没设就留空。只存在你自己的 profile 里，别贴到公开的地方 |
 
 ## 谁能说话
 
@@ -80,7 +80,7 @@
 | --- | --- | --- |
 | `workspaceCwd` | 空 | QQ 会话用哪个工作目录；空 = DSH 当前目录 |
 | `doorbellEnabled` | `false` | 开一个本地 HTTP 口给别的程序递话 |
-| `doorbellPort` / `doorbellToken` | `8643` / 空 | 上面那个口；口令空着启动时随机生成并写日志 |
+| `doorbellPort` / `doorbellToken` | `0` / 空 | 上面那个口；`0` = 随机空闲端口，口令空着启动时随机生成并写日志 |
 | `autoStartNapCat` / `napcatStartCommand` | 关 / 空 | NapCat 没起来时按命令拉起（Windows 计划任务之类） |
 | `dryRun` | `false` | 只打日志，不发消息；排障先开这个 |
 

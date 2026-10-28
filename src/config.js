@@ -3,8 +3,8 @@ import Schema from '@deepseek-ai/schemastery'
 // 全部配置都在这里，界面上按这个 schema 出表单。
 // 默认值一律留空或占位，不写任何真实 QQ 号、token、盘符。
 export const Config = Schema.object({
-  napcatHttp: Schema.string().default('http://127.0.0.1:3000').description('NapCat 的 HTTP 接口地址'),
-  napcatWs: Schema.string().default('ws://127.0.0.1:3001').description('NapCat 的 WebSocket 地址'),
+  napcatHttp: Schema.string().default('http://127.0.0.1:3000').description('NapCat 的 HTTP 接口地址（NapCat 默认端口，没改过就不用动）'),
+  napcatWs: Schema.string().default('ws://127.0.0.1:3001').description('NapCat 的 WebSocket 地址（NapCat 默认端口，没改过就不用动）'),
   napcatToken: Schema.string().default('').description('NapCat 的 access token（NapCat 配置里的 token）'),
 
   ownerQQ: Schema.number().default(0).description('主人的 QQ 号：私聊只回他，群里他也算白名单'),
@@ -34,10 +34,11 @@ export const Config = Schema.object({
   logGroup: Schema.boolean().default(true).description('把群聊流水按天写到 logDir'),
 
   doorbellEnabled: Schema.boolean().default(false).description('开一个本地 HTTP 口，别的程序也能往会话里递话'),
-  doorbellPort: Schema.number().default(8643).description('上面的端口'),
+  doorbellPort: Schema.number().default(0).description('上面的端口；0 = 每次启动随机挑一个空闲端口'),
   doorbellToken: Schema.string().default('').description('上面的口令，留空则启动时随机生成'),
 
-  autoStartNapCat: Schema.boolean().default(false).description('NapCat 没起来时尝试自动拉起（仅 Windows）'),
+  napcatDir: Schema.string().default('').description('NapCat 装在哪；留空就在几个常见位置里找'),
+  autoStartNapCat: Schema.boolean().default(true).description('NapCat 没起来时自动找出来并拉起'),
   napcatStartCommand: Schema.string().default('').description('自定义拉起命令，留空用 napcat 默认启动方式'),
 
   dryRun: Schema.boolean().default(false).description('干跑：不连真 NapCat、不发消息，只打日志'),

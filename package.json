@@ -1,57 +1,67 @@
 {
-  "name": "dsh-qq-bridge",
-  "version": "0.1.0",
-  "description": "把 QQ（NapCat）接到 DeepSeek Harness：私聊和群聊消息递进会话，回复发回 QQ；默认只回主人，群里只在被点名时接。",
-  "type": "module",
-  "main": "src/index.js",
-  "exports": {
-    ".": "./src/index.js",
-    "./cordis.patch.yml": "./cordis.patch.yml",
-    "./package.json": "./package.json"
-  },
-  "files": [
-    "src",
-    "docs",
-    "cordis.patch.yml",
-    "README.md",
-    "LICENSE"
-  ],
-  "keywords": [
-    "dsh",
-    "dsh-plugin",
-    "deepseek-harness",
-    "qq",
-    "napcat",
-    "cordis"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Cike-money/dsh-qq-bridge.git"
-  },
-  "homepage": "https://github.com/Cike-money/dsh-qq-bridge#readme",
-  "bugs": {
-    "url": "https://github.com/Cike-money/dsh-qq-bridge/issues"
-  },
-  "engines": {
-    "node": ">=22.15",
-    "dsh": ">=0.2.1-rc.2"
-  },
-  "scripts": {
-    "test": "node --import ./support/setup.mjs --test"
-  },
-  "peerDependencies": {
-    "@deepseek-ai/cordis": "^4.0.4",
-    "@deepseek-ai/schemastery": "^3.18.2"
-  },
-  "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    },
-    "compatibility": {
-      "dshReleases": {
-        "0.2.1-rc.2": "compatible"
-      }
-    }
-  }
+    "name":  "dsh-qq-bridge",
+    "version":  "0.1.1",
+    "description":  "把 QQ（NapCat）接到 DeepSeek Harness：私聊和群聊消息递进会话，回复发回 QQ；默认只回主人，群里只在被点名时接。",
+    "type":  "module",
+    "main":  "src/index.js",
+    "exports":  {
+                    ".":  "./src/index.js",
+                    "./cordis.patch.yml":  "./cordis.patch.yml",
+                    "./package.json":  "./package.json",
+                    "./client":  "./lib/client.js"
+                },
+    "files":  [
+                  "src",
+                  "lib",
+                  "docs",
+                  "cordis.patch.yml",
+                  "README.md",
+                  "LICENSE"
+              ],
+    "keywords":  [
+                     "dsh",
+                     "dsh-plugin",
+                     "deepseek-harness",
+                     "qq",
+                     "napcat",
+                     "cordis"
+                 ],
+    "license":  "MIT",
+    "repository":  {
+                       "type":  "git",
+                       "url":  "git+https://github.com/Cike-money/dsh-qq-bridge.git"
+                   },
+    "homepage":  "https://github.com/Cike-money/dsh-qq-bridge#readme",
+    "bugs":  {
+                 "url":  "https://github.com/Cike-money/dsh-qq-bridge/issues"
+             },
+    "engines":  {
+                    "node":  "\u003e=22.15",
+                    "dsh":  "\u003e=0.2.1-rc.2"
+                },
+    "scripts":  {
+                    "test":  "node --import ./support/setup.mjs --test"
+                },
+    "peerDependencies":  {
+                             "@deepseek-ai/cordis":  "^4.0.4",
+                             "@deepseek-ai/schemastery":  "^3.18.2"
+                         },
+    "dsh":  {
+                "bundle":  {
+                               "patch":  "./cordis.patch.yml"
+                           },
+                "compatibility":  {
+                                      "dshReleases":  {
+                                                          "0.2.1-rc.2":  "compatible"
+                                                      }
+                                  },
+                "client":  {
+                               "inject":  [
+                                              "@deepseek-ai/dsh-client-locale",
+                                              "@deepseek-ai/dsh-client-ui-settings",
+                                              "@deepseek-ai/dsh-client-ui-plugin-manager"
+                                          ],
+                               "platform":  "web"
+                           }
+            }
 }

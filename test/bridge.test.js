@@ -106,8 +106,8 @@ test('整条链路：假 NapCat → 路由 → 假会话 → 发回 NapCat', asy
 
 test('干跑不连也不发', async () => {
   const posts = []
-  const fetchImpl = async (url) => {
-    posts.push(String(url))
+  const fetchImpl = async (url, opts = {}) => {
+    posts.push({ url: String(url), headers: opts.headers ?? {} })
     return { ok: true, json: async () => ({}) }
   }
   const config = { napcatHttp: 'http://x', napcatWs: 'ws://x', napcatToken: '', dryRun: true, logDir: '', quietWords: ['SILENT'], maxBubbles: 4, bubbleGapMs: 0 }
@@ -116,4 +116,22 @@ test('干跑不连也不发', async () => {
   await bridge.send({ kind: 'group', groupId: 1, text: 'hi' })
   assert.equal(posts.length, 0)
   bridge.stop()
+})
+test('没设 token 就不带 Authorization，设了才带', async () => {
+  const seen = []
+  const fetchImpl = async (url, opts = {}) => {
+    seen.push({ url: String(url), headers: opts.headers ?? {} })
+    return { ok: true, json: async () => ({ data: { user_id: 9 } }) }
+  }
+  const base = { napcatHttp: 'http://x', napcatWs: 'ws://x', logDir: '', quietWords: ['SILENT'], maxBubbles: 4, bubbleGapMs: 0 }
+
+  const noToken = createBridge({ config: { ...base, napcatToken: '' }, log: () => {}, fetchImpl, WebSocketImpl: FakeWS })
+  await noToken.start()
+  noToken.stop()
+  assert.equal('Authorization' in seen[0].headers, false)
+
+  const withToken = createBridge({ config: { ...base, napcatToken: 't' }, log: () => {}, fetchImpl, WebSocketImpl: FakeWS })
+  await withToken.start()
+  withToken.stop()
+  assert.equal(seen.at(-1).headers.Authorization, 'Bearer t')
 })

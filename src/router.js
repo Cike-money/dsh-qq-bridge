@@ -13,7 +13,7 @@ export function createRouter({ config, ask, send, forget = async () => null, log
   const firstSeen = new Map() // 群号 -> 第一次见到它的时间
   const lastScan = new Map() // 群号 -> 上次到点自看的时间（看过才写）
 
-  const quiet = () => (Array.isArray(config.quietWords) && config.quietWords.length ? config.quietWords : ['SILENT'])
+  const quiet = () => (Array.isArray(config.quietWords) ? config.quietWords : ['SILENT'])
   const owner = Number(config.ownerQQ) || 0
   const whitelist = (config.whitelist ?? []).map(Number).filter(Boolean)
   const logDir = config.logDir || ''
@@ -163,6 +163,13 @@ export function createRouter({ config, ask, send, forget = async () => null, log
     if (!(interval > 0)) return []
     const due = []
     for (const [gid, spokenAt] of seen) {
+      // 七天没动静的群就别留着了，不然表只长不缩
+      if (now() - spokenAt > 7 * 24 * 60 * 60 * 1000) {
+        seen.delete(gid)
+        firstSeen.delete(gid)
+        lastScan.delete(gid)
+        continue
+      }
       const scanned = lastScan.get(gid)
       if (scanned === undefined) {
         // 还没看过：从第一次见到这个群算起，够一个间隔就端一次
